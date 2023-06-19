@@ -15,8 +15,13 @@ class ProductsController extends Controller
     //
 
 
+    // public function productListView(){
+    //     $users = Products::orderBy('id','DESC')->get();
+    //     return view('product_list',['users'=>$users]);
+    // }
+    
     public function productsview(){
-        $users = DB::select('select * from products');
+        $users = Products::orderBy('id','DESC')->get();
         return view('products',['users'=>$users]);
     }
     
@@ -28,20 +33,84 @@ class ProductsController extends Controller
         $product->description = $request->description;
         $product->summary = $request->summary;
         $product->categories = $request->categories;
-        // $name = $request->file('image')->getClientOriginalName();
-        // $request->file('image')->store('public/assets/images/');
-        $product->image = $request->image;
+        $file = $request->file('image');
+        $fileName = time().''.$file->getClientOriginalName();
+        $filePath = $file->storeAs('image' , $fileName , 'public');
+        $product->image = $filePath;
         $product->quantity = $request->quantity;
         $product->price = $request->price;
         $product->mrp = $request->mrp;
-        // if ($request->hasFile('profile_photo')) {
-        //     $file = $request->file('profile_photo');
-        //     $name = Str::uuid() . "." . $file->getClientOriginalExtension();
-        //     $profile_photo = "league/$name";
-        //     Storage::disk('public')->put($profile_photo, file_get_contents($file->getRealPath()));
-        // }
+        $product->status = $request->status;
         $product->save();
-        return response()->json($product);
+        $users = Products::orderBy('id','DESC')->get();
+        return view('product_list',['users'=>$users]);
+    }
+
+    public function changeStatus(Request $request){
+        $product = Products::find($request->id);
+        if ($product) {
+            $product->status = $request->status; 
+            $product->save();
+            $users = Products::orderBy('id','DESC')->get();
+            return view('product_list',['users'=>$users]);
+            // return response()->json(['success' => true]);
+        }
+        
+    }
+    public function updateProductView(Request $request){
+        $product = Products::find($request->id);
+        if ($product) {
+            // return response()->json($product);
+            return view('product_update',['product'=>$product]);
+            // return response()->json(['success' => true]);
+        }
+        
+    }
+    public function updateProduct(Request $request){
+        $product = Products::find($request->id);
+        $product->name = $request->name;
+        $product->title = $request->title;
+        $product->sku = $request->sku;
+        $product->description = $request->description;
+        $product->categories = $request->categories;
+        // $product->image = $request->image;
+        $product->quantity = $request->quantity;
+        $product->price = $request->price;
+        $product->mrp = $request->mrp;
+        $product->save();
+        $users = Products::orderBy('id','DESC')->get();
+        return view('product_list',['users'=>$users]);        
+    }
+    public function deleteProduct(Request $request){
+        $product = Products::where('id', $request->id)->delete();
+        
+        if ($product) {
+            $users = Products::orderBy('id','DESC')->get();
+            return view('product_list',['users'=>$users]);
+        }
+        
+    }
+
+
+    // Using the new Ajax Method
+
+    public function product2(){
+        $products = Products::orderBy('id','desc')->get();
+        if(request()->ajax()){
+            return view('product2_list',['products' , $products]);
+        }
+        else{
+            return view('products2', ['products'=>$products]);
+        }
+    }
+    public function product2Add(){
+        $products = Products::orderBy('id','desc')->get();
+        if(request()->ajax()){
+            return view('product2_list',['products' , $products]);
+        }
+        else{
+            return view('products2', ['products'=>$products]);
+        }
     }
     
 
