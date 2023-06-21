@@ -5,7 +5,7 @@
               <h1 class="modal-title fs-5" id="exampleModalLabel">Add products</h1>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="productForm" enctype='multipart/form-data'>
+            <form id="productForm" method="post" enctype='multipart/form-data'>
 
               <input type="hidden" name="_token" id="csrf" value="{{ csrf_token() }}" />
               <div class="modal-body">
@@ -71,7 +71,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Add Product</button>
+                <button type="button" onclick="addEditProduct('productForm' , 'exampleModal' )" class="btn btn-primary">Add Product</button>
               </div>
             </form>
           </div>

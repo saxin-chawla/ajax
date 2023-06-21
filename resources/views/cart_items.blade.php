@@ -40,7 +40,7 @@
           <a href="{{route('index')}}" class="list-group-item list-group-item-action py-2 ripple" aria-current="true">
             <i class="fas fa-tachometer-alt fa-fw me-3"></i><span>Main dashboard</span>
           </a>
-          <a href="{{route('product2')}}" class="list-group-item list-group-item-action py-2 ripple active">
+          <a href="{{route('products')}}" class="list-group-item list-group-item-action py-2 ripple active">
             <i class="fas fa-chart-area fa-fw me-3"></i><span>Products</span>
           </a>
           <a href="#" class="list-group-item list-group-item-action py-2 ripple"><i class="fas fa-lock fa-fw me-3"></i><span>Password</span></a>
@@ -147,13 +147,13 @@
 
   <!--Main layout-->
   <main style="margin-top: 58px">
-    <div class="container pt-4" id="cart-list">
+    <div class="container pt-4">
       <!-- Button trigger modal -->
       <button type="button" class="btn btn-primary addProducts" onclick="modalShow('exampleModal')">
         Add Products
       </button>
 
-      <!-- Modal -->
+      <!-- Modal -->formattedUrl
 
 
 
@@ -165,8 +165,6 @@
         @include('product_add')
       </div>
       <div id="product-update">
-      </div>
-      <div id="product-buy">
       </div>
 
     </div>
@@ -226,7 +224,6 @@
             if(res.status){
               alert('deleted');
               fetchProducts();
-              countCart();
             }
         }, 'json')
         .fail(err => {
@@ -273,9 +270,8 @@
     function fetchCart() {
       $.get(cartFetchUrl, function(h) {
         
-        $('#cart-list').html(h);
+        $('#content-body').html(h);
         tableShow();
-        countCart();
       }, 'html')
       .fail(err => {
         console.table(err)
@@ -303,31 +299,6 @@
         });
     }
 
-    function deleteCart(button) {
-      let id = button.data('id');
-      console.log(id);
-      const deleteUrl = "{{ route('deleteCart', '') }}/" + id;
-      let con = confirm('Are you sure want to remove the product from Cart');
-
-      console.log(deleteUrl);
-      if(con){
-        $.get(deleteUrl, function(res) {
-            if(res.status){
-              alert('Removed');
-              fetchCart()
-            }
-        }, 'json')
-        .fail(err => {
-          console.table(err)
-          console.log(err.responseText)
-        })
-        .always(() => {
-          console.log('refreshed')
-        });
-      }
-      
-    }
-    
     function addToCart(button) {
       let productId = button.data('id');
       let userId = button.data('uid');
@@ -353,8 +324,6 @@
 
       
     }
- 
-
     const productUrl = "{{ route('addEdit') }}";
 
     // function addEditProduct(formId, modalId) {
@@ -388,12 +357,6 @@
     // }
 
     function addEditProduct(formId, modalId) {
-      
-      $.ajaxSetup({
-        headers: {
-          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-      });
       let form = $(`#${formId}`)[0];
       let data = new FormData(form);
 
@@ -475,7 +438,6 @@
           contentBody.html(data);
           tableShow();
           alert('Updated');
-          countCart();
 
           $("#updateModal").modal('hide');
         },

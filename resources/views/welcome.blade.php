@@ -26,7 +26,7 @@
           <a href="{{route('index')}}" class="list-group-item list-group-item-action py-2 ripple active" aria-current="true">
             <i class="fas fa-tachometer-alt fa-fw me-3"></i><span>Main dashboard</span>
           </a>
-          <a href="{{route('products')}}" class="list-group-item list-group-item-action py-2 ripple">
+          <a href="{{route('product2')}}" class="list-group-item list-group-item-action py-2 ripple">
             <i class="fas fa-chart-area fa-fw me-3"></i><span>Products</span>
           </a>
           <a href="#" class="list-group-item list-group-item-action py-2 ripple"><i class="fas fa-lock fa-fw me-3"></i><span>Password</span></a>
